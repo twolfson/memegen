@@ -3,6 +3,29 @@
 <head>
   <title>Meme generator</title>
   <style type="text/css">
+    label {
+      cursor: pointer;
+    }
+
+    .hidden-radio {
+      position: relative;
+    }
+
+    .hidden-radio > input[type="radio"] {
+      display: none;
+    }
+
+    .hidden-radio__background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+    }
+
+    .hidden-radio > input[type="radio"]:checked + .hidden-radio__background {
+      background: blue;
+    }
   </style>
 </head>
 <body>
@@ -10,11 +33,15 @@
   <div style="width: 45%;">
     <h2>Select a meme</h2>
     {% for img in imgs %}
-    <label style="display: block">
-      <div><strong>{{ img.name }}</strong></div>
-      <input type="radio" name="meme" value="{{ img.name }}" {% if loop.first %} checked="checked" {% endif %}/>
-      <img src="{{ img.url }}" />
-    </label>
+    <div>
+      <label class="hidden-radio">
+        <strong>{{ img.name }}</strong>
+        <br/>
+        <input type="radio" name="meme" value="{{ img.name }}" {% if loop.first %} checked="checked" {% endif %}/>
+        <div class="hidden-radio__background"></div>
+        <img src="{{ img.url }}" />
+      </label>
+    </div>
     {% endfor %}
   </div>
 </body>
