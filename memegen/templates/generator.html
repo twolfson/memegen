@@ -11,35 +11,71 @@
       position: relative;
     }
 
-    .hidden-radio > input[type="radio"] {
+    .hidden-radio input[type="radio"] {
       display: none;
     }
 
-    .hidden-radio__background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      right: 0;
-    }
-
-    .hidden-radio > input[type="radio"]:checked + .hidden-radio__background {
+    .hidden-radio--checked {
       background: blue;
     }
   </style>
+  <script>
+    (function initClosure () {
+      // Define our constants
+      var HIDDEN_RADIO_SELECTOR = '.hidden-radio';
+      var HIDDEN_RADIO_CHECKED_CLASS = 'hidden-radio--checked';
+
+      // When our DOM is ready, set up our bindings
+      // TODO: Build me as a JS plugin
+      function init() {
+        // Find our all hidden radio classes
+        var $hiddenRadioContainers = document.querySelectorAll(HIDDEN_RADIO_SELECTOR);
+
+        // For each of our containers, bind to their input's change events
+        var $lastContainer;
+        [].slice.call($hiddenRadioContainers).forEach(function bindEvents ($container) {
+          // Find its respective input
+          var $input = $container.querySelector('input[type=radio]');
+
+          // Bind to its change events
+          function handleChange(evt) {
+            // If the input is checked
+            if ($input.checked) {
+              // Add a `checked` state to our container
+              $container.classList.add(HIDDEN_RADIO_CHECKED_CLASS);
+
+              // If there was a last container, then remove its class
+              // DEV: No `change` event fires upon deselection
+              if ($lastContainer) {
+                $lastContainer.classList.remove(HIDDEN_RADIO_CHECKED_CLASS);
+              }
+
+              // Save our container as the last container
+              $lastContainer = $container;
+            }
+          }
+          $input.addEventListener('change', handleChange);
+
+          // Trigger the event now
+          handleChange(null);
+        });
+      }
+      // http://youmightnotneedjquery.com/#ready
+      document.addEventListener('DOMContentLoaded', init);
+    }());
+  </script>
 </head>
 <body>
   <h1>Meme generator</h1>
-  <div style="width: 45%;">
+  <div style="width: 580px;">
     <h2>Select a meme</h2>
     {% for img in imgs %}
     <div>
-      <label class="hidden-radio">
+      <label class="hidden-radio" style="display: block; padding: 20px; float: left; box-sizing: border-box; width: 290px;">
         <strong>{{ img.name }}</strong>
         <br/>
         <input type="radio" name="meme" value="{{ img.name }}" {% if loop.first %} checked="checked" {% endif %}/>
-        <div class="hidden-radio__background"></div>
-        <img src="{{ img.url }}" />
+        <img src="{{ img.url }}" style="width: 250px;" />
       </label>
     </div>
     {% endfor %}
