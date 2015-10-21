@@ -11,6 +11,10 @@
       cursor: pointer;
     }
 
+    .hidden {
+      display: none;
+    }
+
     .hidden-radio {
       position: relative;
     }
@@ -88,13 +92,13 @@
   </div>
   <div style="float: left;">
     <h2>Enter meme content</h2>
-    <form action="javascript:void 0;" style="display: table;">
+    <form id="meme-form" action="javascript:void 0;" style="display: table;">
       <div style="padding: 5px 0;">
         <!-- TODO: Bind selecting a meme here to toggling a radio -->
         <label style="display: block">Meme:</label>
         <select name="meme" style="width: 100%;">
           {% for img in imgs %}
-            <option name="meme">{{ img.name }}</option>
+            <option name="meme" value="{{ img.key }}">{{ img.name }}</option>
           {% endfor %}
         </select>
       </div>
@@ -110,6 +114,71 @@
         <button type="submit" style="width: 100%; height: 2.5em; font-size: 1.5em; cursor: pointer;">Generate meme</button>
       </p>
     </form>
+    <div id="result" class="hidden">
+      <h2>Result</h2>
+      <img id="result-img"/>
+      <a id="result-href"></a>
+    </div>
+    <script>
+      (function formInitClosure () {
+        // Define a helper for our custom escape logic
+        // https://github.com/jacebrowning/memegen/tree/5672d03cec2db0a525a02bfedf604afc654a3cb6#special-characters
+        function escapeMemeText(str) {
+          return str
+            .replace(/-/g, '--')
+            .replace(/_/g, '__')
+            .replace(/\?/g, '~q')
+            .replace(/%/g, '~p');
+        }
+
+        // When our page loads, add our bindings
+        function init() {
+          // Find our form, its elements, and our result container
+          var $memeForm = document.getElementById('meme-form');
+          var $memeSelect = $memeForm.querySelector('select[name=meme]');
+          var $memeTop = $memeForm.querySelector('input[name=top]');
+          var $memeBottom = $memeForm.querySelector('input[name=bottom]');
+          var $result = document.getElementById('result');
+          var $resultImg = document.getElementById('result-img');
+          var $resultHref = document.getElementById('result-href');
+
+          // When our form is submitted, fill our our result
+          $memeForm.addEventListener('submit', function populateResult (evt) {
+            // Prevent default form actions and from it reaching other targets
+            evt.preventDefault();
+            evt.stopPropagation();
+
+            // Collect info from our form
+            var meme = $memeSelect.value;
+            var memeTop = $memeTop.value;
+            var memeBottom = $memeBottom.value;
+            // http://memegen.link/afraid/hello/world.jpg
+            var location = window.location;
+            var memeUrl = location.protocol + '//' + location.host + '/' + encodeURIComponent(meme) +
+              '/' + encodeURIComponent(memeTop) + '/' + encodeURIComponent(memeBottom) + '.jpg';
+            var memeTextParts = [];
+            if (memeTop) {
+              memeTextParts.push(memeTop);
+            }
+            if (memeBottom) {
+              memeTextParts.push(memeBottom);
+            }
+            var memeText = memeTextParts.join(' ');
+
+            // If our result is hidden, make it visible
+            $result.classList.remove('hidden');
+
+            // Update our result img and link
+            $resultImg.src = memeUrl;
+            $resultImg.alt = memeText;
+            $resultHref.href= memeUrl;
+            $resultHref.textContent = memeUrl;
+          });
+        }
+        // http://youmightnotneedjquery.com/#ready
+        document.addEventListener('DOMContentLoaded', init);
+      }());
+    </script>
   </div>
 </body>
 </html>
