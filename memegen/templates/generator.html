@@ -3,23 +3,19 @@
 <head>
   <title>Meme generator</title>
   <style type="text/css">
-  div {
-    vertical-align: top;
-    display: inline-block;
-    text-align: center;
-    margin: 1em;
-  }
-  a {
-    display: block;
-  }
   </style>
 </head>
 <body>
-  {% for img in imgs %}
-  <div>
-    <a href="{{ img.url }}"><img src="{{ img.url }}"/></a>
-    <a href="{{ img.link }}">{{ img.link }}</a>
+  <h1>Meme generator</h1>
+  <div style="width: 45%;">
+    <h2>Select a meme</h2>
+    {% for img in imgs %}
+    <label style="display: block">
+      <div><strong>{{ img.name }}</strong></div>
+      <input type="radio" name="meme" value="{{ img.name }}" {% if loop.first %} checked="checked" {% endif %}/>
+      <img src="{{ img.url }}" />
+    </label>
+    {% endfor %}
   </div>
-  {% endfor %}
 </body>
 </html>
