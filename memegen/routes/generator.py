@@ -8,7 +8,6 @@ from ._common import url_for
 blueprint = Blueprint('generator', __name__, url_prefix="/generator")
 
 
-# TODO: Deduplicate with `overview#_gen`
 def _gen():
     for template in sorted(app.template_service.all()):
         path = template.sample_path
