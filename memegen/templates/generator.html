@@ -54,7 +54,17 @@
       cursor: pointer;
     }
 
-    /* TODO: Document me */
+    /**
+      Hidden radio component, use radio buttons to highlight 1 element at a time
+
+      Usage:
+
+        <div class="hidden-radio">
+          <span>Content to show</span>
+          <input name="radio-name" type="radio" />
+        </div>
+        (n times)
+     */
     .hidden-radio {
       position: relative;
     }
@@ -96,7 +106,6 @@
       <h2>Select a meme</h2>
       <div>
       {% for img in imgs %}
-        <!-- TODO: Make these target setting a value in the select -->
         <label class="hidden-radio meme-select-item">
           <strong>{{ img.name }}</strong>
           <br/>
@@ -110,7 +119,6 @@
       <h2>Enter meme content</h2>
       <form id="meme-form">
         <p>
-          <!-- TODO: Bind selecting a meme here to toggling a radio -->
           <label for="meme">Meme:</label>
           <select id="meme" name="meme" class="one-whole" data-set-radio="[name=radio-meme]">
             {% for img in imgs %}
