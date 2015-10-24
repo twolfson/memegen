@@ -4,6 +4,10 @@
   <title>Meme generator</title>
   <style type="text/css">
     /* Base CSS */
+    * {
+      box-sizing: border-box;
+    }
+
     html, body {
       font-family: Helvetica, sans-serif;
     }
@@ -28,6 +32,10 @@
 
     .flex-col-2 {
       flex-grow: 2;
+    }
+
+    .flex-col-3 {
+      flex-grow: 3;
     }
 
     /* CSS widths */
@@ -61,10 +69,27 @@
     }
 
     /**
+      Page specific CSS
+     */
+    .meme-img {
+      width: 250px;
+    }
+
+    .meme-select-item {
+      padding: 20px;
+      display: inline-block;
+      width: 290px; /* 250px meme + 20px * 2 padding */
+    }
+
+    /**
       Trumps
      */
     .hidden {
       display: none;
+    }
+
+    .invisible {
+      visibility: hidden;
     }
 
     .block {
@@ -121,17 +146,17 @@
 <body>
   <h1>Meme generator</h1>
   <div class="flex-grid">
-    <div class="flex-col-2">
+    <div class="flex-col-1">
       <!-- TODO: Either make this scrollable or the "Enter meme content fixed" -->
       <h2>Select a meme</h2>
-      <div class="flex-grid">
+      <div>
       {% for img in imgs %}
         <!-- TODO: Make these target setting a value in the select -->
-        <label class="hidden-radio">
+        <label class="hidden-radio meme-select-item">
           <strong>{{ img.name }}</strong>
           <br/>
           <input type="radio" name="meme" value="{{ img.name }}" {% if img.selected %} checked="checked" {% endif %}/>
-          <img src="{{ img.url }}" style="width: 250px;" />
+          <img src="{{ img.url }}" class="meme-img" />
         </label>
       {% endfor %}
       </div>
@@ -163,10 +188,12 @@
     </div>
     <div class="flex-col-1" id="result">
       <h2>Result</h2>
-      <img id="result-img" class="hidden"/>
+      <img id="result-img" class="meme-img hidden"/>
       <!-- TODO: Consider moving to p over br -->
       <br/>
       <a id="result-href" class="hidden"></a>
+      <!-- Define a width placeholder for our img -->
+      <div class="meme-img invisible">&nbsp;</div>
     </div>
   </div>
   <script>
