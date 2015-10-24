@@ -191,9 +191,47 @@
           var $src = evt.target;
           var selector = $src.dataset.setSelect;
           if (selector !== undefined) {
-            // Find the target element and set its value to our value
+            // Find the target element
             var $targetSelect = document.querySelector(selector);
-            $targetSelect.value = $src.value;
+
+            // If the value is changing, then update it and trigger a change event
+            // DEV: This is to prevent cycles between setting element values
+            if ($targetSelect.value !== $src.value) {
+              $targetSelect.value = $src.value;
+              // http://youmightnotneedjquery.com/#trigger_native
+              var changeEvt = document.createEvent('HTMLEvents');
+              changeEvt.initEvent('change', true, false);
+              $targetSelect.dispatchEvent(changeEvt);
+            }
+          }
+        });
+      }
+      // http://youmightnotneedjquery.com/#ready
+      document.addEventListener('DOMContentLoaded', init);
+    }());
+
+    (function setRadioClosure () {
+      // When our page loads, add our bindings
+      function init() {
+        // When a change event occurs
+        document.body.addEventListener('change', function handleChange (evt) {
+          // If the target was a `data-set-radio` element
+          var $src = evt.target;
+          var partialSelector = $src.dataset.setRadio;
+          if (partialSelector !== undefined) {
+            // Find the target element
+            var selector = partialSelector + '[value=' + $src.value + ']';
+            var $targetRadio = document.querySelector(selector);
+
+            // If the element isn't checked, then update it and trigger a change event
+            // DEV: This is to prevent cycles between setting element values
+            if ($targetRadio.checked !== true) {
+              $targetRadio.checked = true;
+              // http://youmightnotneedjquery.com/#trigger_native
+              var changeEvt = document.createEvent('HTMLEvents');
+              changeEvt.initEvent('change', true, false);
+              $targetRadio.dispatchEvent(changeEvt);
+            }
           }
         });
       }
