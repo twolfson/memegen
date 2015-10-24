@@ -100,7 +100,7 @@
         <label class="hidden-radio meme-select-item">
           <strong>{{ img.name }}</strong>
           <br/>
-          <input type="radio" name="meme" value="{{ img.name }}" {% if img.selected %} checked="checked" {% endif %}/>
+          <input type="radio" name="radio-meme" value="{{ img.key }}" data-set-select="#meme"] {% if img.selected %} checked="checked" {% endif %}/>
           <img src="{{ img.url }}" class="meme-img" />
         </label>
       {% endfor %}
@@ -111,20 +111,20 @@
       <form id="meme-form">
         <p>
           <!-- TODO: Bind selecting a meme here to toggling a radio -->
-          <label>Meme:</label>
-          <select name="meme" class="one-whole">
+          <label for="meme">Meme:</label>
+          <select id="meme" name="meme" class="one-whole" data-set-radio="[name=radio-meme]">
             {% for img in imgs %}
               <option name="meme" value="{{ img.key }}">{{ img.name }}</option>
             {% endfor %}
           </select>
         </p>
         <p>
-          <label>Top:</label>
-          <input type="text" name="top" placeholder="your text" class="one-whole"/>
+          <label for="top">Top:</label>
+          <input type="text" id="top" name="top" placeholder="your text" class="one-whole"/>
         </p>
         <p>
-          <label>Bottom:</label>
-          <input type="text" name="bottom" placeholder="goes here" class="one-whole"/>
+          <label for="bottom" >Bottom:</label>
+          <input type="text" id="bottom" name="bottom" placeholder="goes here" class="one-whole"/>
         </p>
         <p>
           <button type="submit" class="btn-large btn-block">Generate meme</button>
@@ -176,6 +176,25 @@
 
           // Trigger the event now
           handleChange(null);
+        });
+      }
+      // http://youmightnotneedjquery.com/#ready
+      document.addEventListener('DOMContentLoaded', init);
+    }());
+
+    (function setSelectClosure () {
+      // When our page loads, add our bindings
+      function init() {
+        // When a change event occurs
+        document.body.addEventListener('change', function handleChange (evt) {
+          // If the target was a `data-set-select` element
+          var $src = evt.target;
+          var selector = $src.dataset.setSelect;
+          if (selector !== undefined) {
+            // Find the target element and set its value to our value
+            var $targetSelect = document.querySelector(selector);
+            $targetSelect.value = $src.value;
+          }
         });
       }
       // http://youmightnotneedjquery.com/#ready
