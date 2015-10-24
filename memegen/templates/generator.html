@@ -88,14 +88,63 @@
       display: block;
     }
   </style>
+</head>
+<body>
+  <h1>Meme generator</h1>
+  <div class="grid">
+    <div class="grid__col one-half">
+      <h2>Select a meme</h2>
+      <div>
+      {% for img in imgs %}
+        <!-- TODO: Make these target setting a value in the select -->
+        <label class="hidden-radio meme-select-item">
+          <strong>{{ img.name }}</strong>
+          <br/>
+          <input type="radio" name="meme" value="{{ img.name }}" {% if img.selected %} checked="checked" {% endif %}/>
+          <img src="{{ img.url }}" class="meme-img" />
+        </label>
+      {% endfor %}
+      </div>
+    </div>
+    <div class="grid__col one-quarter">
+      <h2>Enter meme content</h2>
+      <form id="meme-form">
+        <p>
+          <!-- TODO: Bind selecting a meme here to toggling a radio -->
+          <label>Meme:</label>
+          <select name="meme" class="one-whole">
+            {% for img in imgs %}
+              <option name="meme" value="{{ img.key }}">{{ img.name }}</option>
+            {% endfor %}
+          </select>
+        </p>
+        <p>
+          <label>Top:</label>
+          <input type="text" name="top" placeholder="your text" class="one-whole"/>
+        </p>
+        <p>
+          <label>Bottom:</label>
+          <input type="text" name="bottom" placeholder="goes here" class="one-whole"/>
+        </p>
+        <p>
+          <button type="submit" class="btn-large btn-block">Generate meme</button>
+        </p>
+      </form>
+    </div>
+    <div class="grid__col one-quarter" id="result">
+      <h2>Result</h2>
+      <img id="result-img" class="meme-img" href="/officespace/yeah.../if%20you%20could%20fill%20out%20the%20fields%20on%20the%20left%2C%20that%20would%20be%20great.jpg" />
+      <br/>
+      <a id="result-href"></a>
+    </div>
+  </div>
   <script>
-    (function initClosure () {
+    (function hiddenRadioClosure () {
       // Define our constants
       var HIDDEN_RADIO_SELECTOR = '.hidden-radio';
       var HIDDEN_RADIO_CHECKED_CLASS = 'hidden-radio--checked';
 
       // When our DOM is ready, set up our bindings
-      // TODO: Build me as a JS plugin
       function init() {
         // Find our all hidden radio classes
         var $hiddenRadioContainers = document.querySelectorAll(HIDDEN_RADIO_SELECTOR);
@@ -132,60 +181,8 @@
       // http://youmightnotneedjquery.com/#ready
       document.addEventListener('DOMContentLoaded', init);
     }());
-  </script>
-</head>
-<body>
-  <h1>Meme generator</h1>
-  <div class="grid">
-    <div class="grid__col one-half">
-      <!-- TODO: Either make this scrollable or the "Enter meme content fixed" -->
-      <h2>Select a meme</h2>
-      <div>
-      {% for img in imgs %}
-        <!-- TODO: Make these target setting a value in the select -->
-        <label class="hidden-radio meme-select-item">
-          <strong>{{ img.name }}</strong>
-          <br/>
-          <input type="radio" name="meme" value="{{ img.name }}" {% if img.selected %} checked="checked" {% endif %}/>
-          <img src="{{ img.url }}" class="meme-img" />
-        </label>
-      {% endfor %}
-      </div>
-    </div>
-    <div class="grid__col one-quarter">
-      <h2>Enter meme content</h2>
-      <form id="meme-form">
-        <div>
-          <!-- TODO: Bind selecting a meme here to toggling a radio -->
-          <label>Meme:</label>
-          <select name="meme" class="one-whole">
-            {% for img in imgs %}
-              <option name="meme" value="{{ img.key }}">{{ img.name }}</option>
-            {% endfor %}
-          </select>
-        </div>
-        <div style="padding: 5px 0;">
-          <label>Top:</label>
-          <input type="text" name="top" placeholder="your text" class="one-whole"/>
-        </div>
-        <div style="padding: 5px 0;">
-          <label>Bottom:</label>
-          <input type="text" name="bottom" placeholder="goes here" class="one-whole"/>
-        </div>
-        <p>
-          <button type="submit" class="btn-large btn-block">Generate meme</button>
-        </p>
-      </form>
-    </div>
-    <div class="grid__col one-quarter" id="result">
-      <h2>Result</h2>
-      <img id="result-img" class="meme-img" href="/officespace/yeah.../if%20you%20could%20fill%20out%20the%20fields%20on%20the%20left%2C%20that%20would%20be%20great.jpg" />
-      <br/>
-      <a id="result-href"></a>
-    </div>
-  </div>
-  <script>
-    (function formInitClosure () {
+
+    (function formClosure () {
       // Define a helper for our custom escape logic
       // https://github.com/jacebrowning/memegen/tree/5672d03cec2db0a525a02bfedf604afc654a3cb6#special-characters
       function escapeMemeText(str) {
