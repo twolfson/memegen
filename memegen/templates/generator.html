@@ -3,6 +3,7 @@
 <head>
   <title>Meme generator</title>
   <style type="text/css">
+    /* Base CSS */
     html, body {
       font-family: Helvetica, sans-serif;
     }
@@ -11,10 +12,42 @@
       cursor: pointer;
     }
 
-    .hidden {
-      display: none;
+    /* Flexbox grid component */
+    .flex-grid {
+      display: flex;
     }
 
+    .flex-col-1,
+    .flex-col-2 {
+      padding-right: 20px;
+    }
+
+    .flex-col-1 {
+      flex-grow: 1;
+    }
+
+    .flex-col-2 {
+      flex-grow: 2;
+    }
+
+    /* CSS widths */
+    /* DEV: Similar classes would be `one-half`, `two-thirds` */
+    .one-whole {
+      width: 100%;
+    }
+
+    /* Button modifications */
+    .btn-large {
+      padding: 0.5em;
+      font-size: 1.5em;
+    }
+
+    .btn-block {
+      width: 100%;
+      cursor: pointer;
+    }
+
+    /* TODO: Document me */
     .hidden-radio {
       position: relative;
     }
@@ -26,6 +59,14 @@
     .hidden-radio--checked {
       background: #007DD6; /* Light blue */
     }
+
+    /**
+      Trumps
+     */
+    .hidden {
+      display: none;
+    }
+
   </style>
   <script>
     (function initClosure () {
@@ -75,8 +116,8 @@
 </head>
 <body>
   <h1>Meme generator</h1>
-  <div style="display: flex">
-    <div style="flex-grow: 2; padding-right: 20px">
+  <div class="flex-grid">
+    <div class="flex-col-2">
       <!-- TODO: Either make this scrollable or the "Enter meme content fixed" -->
       <h2>Select a meme</h2>
       {% for img in imgs %}
@@ -91,32 +132,32 @@
       </div>
       {% endfor %}
     </div>
-    <div style="flex-grow: 1; padding-right: 20px">
+    <div class="flex-col-1">
       <h2>Enter meme content</h2>
-      <form id="meme-form" action="javascript:void 0;" style="display: table;">
-        <div style="padding: 5px 0;">
+      <form id="meme-form">
+        <div>
           <!-- TODO: Bind selecting a meme here to toggling a radio -->
-          <label style="display: block">Meme:</label>
-          <select name="meme" style="width: 100%;">
+          <label>Meme:</label>
+          <select name="meme" class="one-whole">
             {% for img in imgs %}
               <option name="meme" value="{{ img.key }}">{{ img.name }}</option>
             {% endfor %}
           </select>
         </div>
         <div style="padding: 5px 0;">
-          <label style="display: block">Top:</label>
-          <input type="text" name="top" placeholder="your text" style="width: 100%;"/>
+          <label>Top:</label>
+          <input type="text" name="top" placeholder="your text" class="one-whole"/>
         </div>
         <div style="padding: 5px 0;">
-          <label style="display: block">Bottom:</label>
-          <input type="text" name="bottom" placeholder="goes here" style="width: 100%;"/>
+          <label>Bottom:</label>
+          <input type="text" name="bottom" placeholder="goes here" class="one-whole"/>
         </div>
         <p>
-          <button type="submit" style="width: 100%; padding: 0.5em; font-size: 1.5em; cursor: pointer;">Generate meme</button>
+          <button type="submit" class="btn-large btn-block">Generate meme</button>
         </p>
       </form>
     </div>
-    <div style="flex-grow: 1; padding-right: 20px" id="result">
+    <div class="flex-col-1" id="result">
       <h2>Result</h2>
       <img id="result-img" class="hidden"/>
       <!-- TODO: Consider moving to p over br -->
