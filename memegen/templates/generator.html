@@ -84,18 +84,9 @@
     /**
       Trumps
      */
-    .hidden {
-      display: none;
-    }
-
-    .invisible {
-      visibility: hidden;
-    }
-
     .block {
       display: block;
     }
-
   </style>
   <script>
     (function initClosure () {
@@ -188,12 +179,9 @@
     </div>
     <div class="grid__col one-quarter" id="result">
       <h2>Result</h2>
-      <img id="result-img" class="meme-img hidden"/>
-      <!-- TODO: Consider moving to p over br -->
+      <img id="result-img" class="meme-img" href="/officespace/yeah.../if%20you%20could%20fill%20out%20the%20fields%20on%20the%20left%2C%20that%20would%20be%20great.jpg" />
       <br/>
-      <a id="result-href" class="hidden"></a>
-      <!-- Define a width placeholder for our img -->
-      <div class="meme-img invisible">&nbsp;</div>
+      <a id="result-href"></a>
     </div>
   </div>
   <script>
@@ -219,16 +207,9 @@
         var $resultImg = document.getElementById('result-img');
         var $resultHref = document.getElementById('result-href');
 
-        // When our form is submitted, fill our our result
-        $memeForm.addEventListener('submit', function populateResult (evt) {
-          // Prevent default form actions and from it reaching other targets
-          evt.preventDefault();
-          evt.stopPropagation();
-
-          // Collect info from our form
-          var meme = $memeSelect.value;
-          var memeTop = $memeTop.value;
-          var memeBottom = $memeBottom.value;
+        // Define helper for complete our result
+        function populateResult(meme, memeTop, memeBottom) {
+          // Generate our meme URL
           // http://memegen.link/afraid/hello/world.jpg
           var location = window.location;
           var memeUrl = location.protocol + '//' + location.host + '/' + encodeURIComponent(meme) +
@@ -242,16 +223,29 @@
           }
           var memeText = memeTextParts.join(' ');
 
-          // Make our result elements visible
-          $resultImg.classList.remove('hidden');
-          $resultHref.classList.remove('hidden');
-
           // Update our result img and link
           $resultImg.src = memeUrl;
           $resultImg.alt = memeText;
           $resultHref.href= memeUrl;
           $resultHref.textContent = memeUrl;
+        }
+
+        // When our form is submitted, fill our our result
+        $memeForm.addEventListener('submit', function populateResult (evt) {
+          // Prevent default form actions and from it reaching other targets
+          evt.preventDefault();
+          evt.stopPropagation();
+
+          // Collect info from our form
+          var meme = $memeSelect.value;
+          var memeTop = $memeTop.value;
+          var memeBottom = $memeBottom.value;
+
+          // Populate our result
         });
+
+        // Start with instructions
+        populateResult('officespace', 'yeah...', 'if you could fill out the fields on the left, that would be great');
       }
       // http://youmightnotneedjquery.com/#ready
       document.addEventListener('DOMContentLoaded', init);
