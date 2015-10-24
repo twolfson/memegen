@@ -25,8 +25,4 @@ def _gen():
 @blueprint.route("")
 @set_renderers(HTMLRenderer)
 def get():
-    imgs = [img for img in _gen()]
-    # TODO: In the future, this could be provided via query param (similar to top/bottom)
-    selected_img = imgs[0]
-    selected_img['selected'] = True
-    return render_template('generator.html', imgs=imgs, selected_img=selected_img)
+    return render_template('generator.html', imgs=_gen())
