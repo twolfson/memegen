@@ -67,6 +67,10 @@
       display: none;
     }
 
+    .block {
+      display: block;
+    }
+
   </style>
   <script>
     (function initClosure () {
@@ -120,17 +124,17 @@
     <div class="flex-col-2">
       <!-- TODO: Either make this scrollable or the "Enter meme content fixed" -->
       <h2>Select a meme</h2>
+      <div class="flex-grid">
       {% for img in imgs %}
-      <div>
         <!-- TODO: Make these target setting a value in the select -->
-        <label class="hidden-radio" style="display: block; padding: 20px; float: left; box-sizing: border-box; width: 290px; height: 310px;">
+        <label class="hidden-radio">
           <strong>{{ img.name }}</strong>
           <br/>
           <input type="radio" name="meme" value="{{ img.name }}" {% if img.selected %} checked="checked" {% endif %}/>
           <img src="{{ img.url }}" style="width: 250px;" />
         </label>
-      </div>
       {% endfor %}
+      </div>
     </div>
     <div class="flex-col-1">
       <h2>Enter meme content</h2>
