@@ -12,7 +12,8 @@ blueprint = Blueprint('generator', __name__, url_prefix="/generator")
 @set_renderers(HTMLRenderer)
 def get():
     imgs = [img for img in samples()]
-    # In the future, this could be provided via query param (similar to top/bottom)
+    # In the future, this could be provided via query param
+    # as well as similar to top/bottom text
     selected_img = imgs[0]
     selected_img['selected'] = True
     return render_template('generator.html', imgs=imgs,
