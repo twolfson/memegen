@@ -293,7 +293,7 @@
         }
 
         // When our form is submitted, fill our our result
-        $memeForm.addEventListener('submit', function populateResult (evt) {
+        $memeForm.addEventListener('submit', function handleSubmit (evt) {
           // Prevent default form actions and from it reaching other targets
           evt.preventDefault();
           evt.stopPropagation();
@@ -304,6 +304,7 @@
           var memeBottom = $memeBottom.value;
 
           // Populate our result
+          populateResult(meme, memeTop, memeBottom);
         });
 
         // Start with instructions
