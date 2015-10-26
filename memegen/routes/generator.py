@@ -15,4 +15,5 @@ def get():
     # In the future, this could be provided via query param (similar to top/bottom)
     selected_img = imgs[0]
     selected_img['selected'] = True
-    return render_template('generator.html', imgs=imgs, selected_img=selected_img)
+    return render_template('generator.html', imgs=imgs,
+                           selected_img=selected_img)
